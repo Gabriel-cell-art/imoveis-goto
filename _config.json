@@ -1,7 +1,7 @@
 {
   "base_url": "https://imoveis-goto.vercel.app",
   "whatsapp": "5571993068515",
-  "corretor": "PREENCHER",
+  "corretor": "Gabriel Goto",
   "creci": "37266",
   "mensagem": "Olá! Vi a página do {tipo} no {bairro} ({preco}) e quero mais informações."
 }
