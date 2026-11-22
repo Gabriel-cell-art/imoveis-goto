@@ -9,7 +9,7 @@
     "Quatro quartos com armários, sendo duas suítes — uma em cada pavimento",
     "Três salas, com estar e jantar no pavimento inferior",
     "Quatro vagas de garagem",
-    "Condomínio aceita animais"
+    "Condomínio com piscina, academia, quadra e espaço kids — e aceita animais"
   ],
   "ficha": {
     "area_privativa": "164 m²",
@@ -22,10 +22,25 @@
   "descritivo": [
     "Cobertura duplex com 164 m² de área privativa, em Armação. O diferencial é a área externa: piscina privativa, terraço e deck — lazer dentro do próprio imóvel, sem depender da agenda da área comum.",
     "São quatro quartos com armários, dois deles suítes, uma em cada pavimento — arranjo que separa bem os ambientes e permite receber hóspedes com privacidade. A parte social tem três salas, duas no pavimento inferior: estar e jantar.",
-    "Completam a planta quatro banheiros e quatro vagas de garagem, número acima do usual para um imóvel de 164 m². O condomínio aceita animais, com taxa de R$ 1.539 por mês."
+    "Completam a planta quatro banheiros e quatro vagas de garagem, número acima do usual para um imóvel de 164 m². O condomínio tem piscina, academia, quadra, salão de festas e espaço kids, aceita animais, e a taxa é de R$ 1.539 por mês."
   ],
   "bairro_texto": "Armação fica na orla de Salvador, com praia, comércio de rua e restaurantes no entorno. A região concentra supermercados, escolas e serviços do dia a dia, com acesso direto ao centro e ao aeroporto pela orla.",
   "cta_titulo": "Quer conhecer a cobertura?",
   "cta_texto": "Me chame no WhatsApp que eu organizo a visita no horário que for melhor para você e envio planta, condomínio e documentação.",
-  "capa_posicao": "left center"
+  "capa_posicao": "left center",
+  "legendas": [
+    "Terraço com a piscina privativa",
+    "Deck do terraço",
+    "Sala de estar, com a escada do duplex",
+    "Sala de jantar",
+    "Segunda sala, no pavimento inferior",
+    "Suíte",
+    "Suíte com closet",
+    "Quarto",
+    "Cozinha",
+    "Banheiro",
+    "Piscina do condomínio (área comum)",
+    "Academia do condomínio (área comum)"
+  ],
+  "capa": "fotos/03.jpg"
 }

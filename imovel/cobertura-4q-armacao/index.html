@@ -27,7 +27,7 @@
 <meta name="twitter:description" content="4 quartos · 2 suítes · 164 m² · 4 vagas">
 <meta name="twitter:image" content="https://imoveis-goto.vercel.app/imovel/cobertura-4q-armacao/og.jpg">
 
-<link rel="preload" as="image" href="fotos/01.jpg" fetchpriority="high">
+<link rel="preload" as="image" href="/imovel/cobertura-4q-armacao/fotos/03.jpg" fetchpriority="high">
 <style>
   :root{
     color-scheme: light;
@@ -52,15 +52,27 @@
 
   /* 1. CAPA */
   .capa{position:relative; height:100vh; height:100svh; min-height:520px; overflow:hidden; background:#14110f}
-  .capa img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover}
+  .capa img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
+    animation:kb 18s ease-out both}
+  @keyframes kb{from{transform:scale(1.09)}to{transform:scale(1)}}
   .capa::after{content:""; position:absolute; inset:0;
     background:linear-gradient(to top, rgba(10,8,7,.92) 0%, rgba(10,8,7,.55) 32%, rgba(10,8,7,.05) 62%, rgba(10,8,7,.25) 100%)}
   .capa-txt{position:absolute; left:0; right:0; bottom:0; z-index:2; color:#fff;
     padding:0 var(--pad) calc(var(--bar) + 26px); max-width:var(--maxw); margin:0 auto}
+  .capa-txt > *{animation:sobe .7s cubic-bezier(.2,.7,.3,1) both}
+  .capa-txt > *:nth-child(2){animation-delay:.08s}
+  .capa-txt > *:nth-child(3){animation-delay:.16s}
+  @keyframes sobe{from{opacity:0; transform:translateY(14px)}to{opacity:1; transform:none}}
   .eyebrow{font-size:13px; letter-spacing:.14em; text-transform:uppercase; color:rgba(255,255,255,.82); margin:0 0 10px}
   .capa h1{font-size:clamp(28px,7.4vw,40px); line-height:1.15; margin:0 0 14px; font-weight:650; letter-spacing:-.02em}
   .preco{font-size:clamp(22px,5.6vw,28px); font-weight:650; margin:0; letter-spacing:-.01em}
   .preco small{display:block; font-size:13px; font-weight:400; letter-spacing:.02em; color:rgba(255,255,255,.72); margin-top:4px}
+
+  /* revelação no scroll */
+  [data-rv]{opacity:0; transform:translateY(18px);
+    transition:opacity .65s cubic-bezier(.2,.7,.3,1), transform .65s cubic-bezier(.2,.7,.3,1)}
+  [data-rv].vis{opacity:1; transform:none}
+  .galeria button[data-rv]{transition-delay:calc(var(--i) * 45ms)}
 
   /* seções */
   section{padding:44px 0}
@@ -121,8 +133,18 @@
   dialog.lb::backdrop{background:#0a0807}
   .lb-track{height:100%; display:flex; overflow-x:auto; scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch}
   .lb-track img{flex:0 0 100%; width:100%; height:100%; object-fit:contain; scroll-snap-align:center}
-  .lb-x{position:fixed; top:calc(10px + env(safe-area-inset-top)); right:10px; z-index:2; width:44px; height:44px;
+  .lb-x{position:fixed; top:calc(10px + env(safe-area-inset-top)); right:10px; z-index:3; width:44px; height:44px;
     border:0; border-radius:50%; background:rgba(255,255,255,.14); color:#fff; font-size:24px; line-height:1; cursor:pointer}
+  .lb-bar{position:fixed; left:0; right:0; bottom:0; z-index:2; pointer-events:none;
+    padding:18px var(--pad) calc(18px + env(safe-area-inset-bottom));
+    background:linear-gradient(to top, rgba(10,8,7,.92), rgba(10,8,7,0))}
+  .lb-bar b{display:block; font-size:12px; letter-spacing:.14em; color:rgba(255,255,255,.6); font-weight:500; margin-bottom:3px}
+  .lb-bar span{display:block; font-size:15px; color:#fff; line-height:1.35}
+  @media (prefers-reduced-motion:reduce){
+    .capa img{animation:none}
+    .capa-txt > *{animation:none}
+    [data-rv]{opacity:1; transform:none; transition:none}
+  }
   @media (min-width:760px){
     section{padding:60px 0}
     .galeria{grid-template-columns:repeat(3,1fr)}
@@ -134,7 +156,7 @@
 <body>
 
 <header class="capa">
-  <img src="fotos/01.jpg" alt="Cobertura em Armação — R$ 950.000" fetchpriority="high" style="object-position:left center">
+  <img src="/imovel/cobertura-4q-armacao/fotos/03.jpg" alt="Cobertura em Armação — R$ 950.000" fetchpriority="high" style="object-position:left center">
   <div class="capa-txt">
     <p class="eyebrow">Cobertura &middot; Armação</p>
     <h1>Duplex com piscina privativa, terraço e deck</h1>
@@ -148,16 +170,23 @@
     <li>Quatro quartos com armários, sendo duas suítes — uma em cada pavimento</li>
     <li>Três salas, com estar e jantar no pavimento inferior</li>
     <li>Quatro vagas de garagem</li>
-    <li>Condomínio aceita animais</li></ul>
+    <li>Condomínio com piscina, academia, quadra e espaço kids — e aceita animais</li></ul>
 </section>
 
 <section class="alt">
   <div class="wrap"><h2 class="sec-t">Fotos</h2></div>
-  <div class="galeria"><button type="button" aria-label="Ampliar foto 1"><img src="fotos/01.jpg" alt="" loading="eager" decoding="async"></button>
-    <button type="button" aria-label="Ampliar foto 2"><img src="fotos/02.jpg" alt="" loading="eager" decoding="async"></button>
-    <button type="button" aria-label="Ampliar foto 3"><img src="fotos/03.jpg" alt="" loading="eager" decoding="async"></button>
-    <button type="button" aria-label="Ampliar foto 4"><img src="fotos/04.jpg" alt="" loading="lazy" decoding="async"></button>
-    <button type="button" aria-label="Ampliar foto 5"><img src="fotos/05.jpg" alt="" loading="lazy" decoding="async"></button></div>
+  <div class="galeria"><button type="button" style="--i:0" aria-label="Ampliar foto 1"><img src="/imovel/cobertura-4q-armacao/fotos/01.jpg" alt="Terraço com a piscina privativa" loading="eager" decoding="async"></button>
+    <button type="button" style="--i:1" aria-label="Ampliar foto 2"><img src="/imovel/cobertura-4q-armacao/fotos/02.jpg" alt="Deck do terraço" loading="eager" decoding="async"></button>
+    <button type="button" style="--i:2" aria-label="Ampliar foto 3"><img src="/imovel/cobertura-4q-armacao/fotos/03.jpg" alt="Sala de estar, com a escada do duplex" loading="eager" decoding="async"></button>
+    <button type="button" style="--i:3" aria-label="Ampliar foto 4"><img src="/imovel/cobertura-4q-armacao/fotos/04.jpg" alt="Sala de jantar" loading="lazy" decoding="async"></button>
+    <button type="button" style="--i:4" aria-label="Ampliar foto 5"><img src="/imovel/cobertura-4q-armacao/fotos/05.jpg" alt="Segunda sala, no pavimento inferior" loading="lazy" decoding="async"></button>
+    <button type="button" style="--i:5" aria-label="Ampliar foto 6"><img src="/imovel/cobertura-4q-armacao/fotos/06.jpg" alt="Suíte" loading="lazy" decoding="async"></button>
+    <button type="button" style="--i:6" aria-label="Ampliar foto 7"><img src="/imovel/cobertura-4q-armacao/fotos/07.jpg" alt="Suíte com closet" loading="lazy" decoding="async"></button>
+    <button type="button" style="--i:7" aria-label="Ampliar foto 8"><img src="/imovel/cobertura-4q-armacao/fotos/08.jpg" alt="Quarto" loading="lazy" decoding="async"></button>
+    <button type="button" style="--i:8" aria-label="Ampliar foto 9"><img src="/imovel/cobertura-4q-armacao/fotos/09.jpg" alt="Cozinha" loading="lazy" decoding="async"></button>
+    <button type="button" style="--i:9" aria-label="Ampliar foto 10"><img src="/imovel/cobertura-4q-armacao/fotos/10.jpg" alt="Banheiro" loading="lazy" decoding="async"></button>
+    <button type="button" style="--i:10" aria-label="Ampliar foto 11"><img src="/imovel/cobertura-4q-armacao/fotos/11.jpg" alt="Piscina do condomínio (área comum)" loading="lazy" decoding="async"></button>
+    <button type="button" style="--i:11" aria-label="Ampliar foto 12"><img src="/imovel/cobertura-4q-armacao/fotos/12.jpg" alt="Academia do condomínio (área comum)" loading="lazy" decoding="async"></button></div>
 </section>
 
 <section class="wrap">
@@ -176,7 +205,7 @@
     <h2 class="sec-t">Sobre o imóvel</h2>
     <p>Cobertura duplex com 164 m² de área privativa, em Armação. O diferencial é a área externa: piscina privativa, terraço e deck — lazer dentro do próprio imóvel, sem depender da agenda da área comum.</p>
     <p>São quatro quartos com armários, dois deles suítes, uma em cada pavimento — arranjo que separa bem os ambientes e permite receber hóspedes com privacidade. A parte social tem três salas, duas no pavimento inferior: estar e jantar.</p>
-    <p>Completam a planta quatro banheiros e quatro vagas de garagem, número acima do usual para um imóvel de 164 m². O condomínio aceita animais, com taxa de R$ 1.539 por mês.</p>
+    <p>Completam a planta quatro banheiros e quatro vagas de garagem, número acima do usual para um imóvel de 164 m². O condomínio tem piscina, academia, quadra, salão de festas e espaço kids, aceita animais, e a taxa é de R$ 1.539 por mês.</p>
   </div>
 </section>
 
@@ -214,6 +243,7 @@
 <dialog class="lb" id="lb">
   <button class="lb-x" aria-label="Fechar">&times;</button>
   <div class="lb-track" id="lbt"></div>
+  <div class="lb-bar"><b id="lbn"></b><span id="lbc"></span></div>
 </dialog>
 
 <script>
@@ -228,9 +258,28 @@
   }
 })();
 (function(){
-  var fotos = ["fotos/01.jpg","fotos/02.jpg","fotos/03.jpg","fotos/04.jpg","fotos/05.jpg"];
+  // revela as seções conforme entram na tela
+  var alvos = [].concat(
+    [].slice.call(document.querySelectorAll('section > .wrap, section > .galeria, .fecho .wrap')),
+    [].slice.call(document.querySelectorAll('.galeria button'))
+  );
+  if (!('IntersectionObserver' in window)) return;
+  alvos.forEach(function(el){ el.setAttribute('data-rv',''); });
+  var io = new IntersectionObserver(function(ents){
+    ents.forEach(function(e){ if (e.isIntersecting){ e.target.classList.add('vis'); io.unobserve(e.target); } });
+  }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+  alvos.forEach(function(el){ io.observe(el); });
+})();
+(function(){
+  var fotos = ["/imovel/cobertura-4q-armacao/fotos/01.jpg","/imovel/cobertura-4q-armacao/fotos/02.jpg","/imovel/cobertura-4q-armacao/fotos/03.jpg","/imovel/cobertura-4q-armacao/fotos/04.jpg","/imovel/cobertura-4q-armacao/fotos/05.jpg","/imovel/cobertura-4q-armacao/fotos/06.jpg","/imovel/cobertura-4q-armacao/fotos/07.jpg","/imovel/cobertura-4q-armacao/fotos/08.jpg","/imovel/cobertura-4q-armacao/fotos/09.jpg","/imovel/cobertura-4q-armacao/fotos/10.jpg","/imovel/cobertura-4q-armacao/fotos/11.jpg","/imovel/cobertura-4q-armacao/fotos/12.jpg"];
+  var legendas = ["Terraço com a piscina privativa","Deck do terraço","Sala de estar, com a escada do duplex","Sala de jantar","Segunda sala, no pavimento inferior","Suíte","Suíte com closet","Quarto","Cozinha","Banheiro","Piscina do condomínio (área comum)","Academia do condomínio (área comum)"];
   var lb = document.getElementById('lb'), track = document.getElementById('lbt');
+  var num = document.getElementById('lbn'), cap = document.getElementById('lbc');
   if(!lb || !lb.showModal) return;
+  function mostra(i){
+    num.textContent = (i + 1) + ' / ' + fotos.length;
+    cap.textContent = legendas[i] || '';
+  }
   var built = false;
   function build(){
     if(built) return;
@@ -241,11 +290,18 @@
   }
   document.querySelectorAll('.galeria button').forEach(function(b,i){
     b.addEventListener('click', function(){
-      build(); lb.showModal();
+      build(); lb.showModal(); mostra(i);
       var el = track.children[i];
       if(el) track.scrollLeft = el.offsetLeft;
     });
   });
+  var t0 = null;
+  track.addEventListener('scroll', function(){
+    clearTimeout(t0);
+    t0 = setTimeout(function(){
+      mostra(Math.round(track.scrollLeft / track.clientWidth));
+    }, 90);
+  }, { passive: true });
   lb.querySelector('.lb-x').addEventListener('click', function(){ lb.close(); });
   lb.addEventListener('click', function(e){ if(e.target === lb) lb.close(); });
 })();

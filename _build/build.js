@@ -96,6 +96,9 @@ function render(slug) {
   if (!fotos.length) throw new Error(`${slug}: pasta fotos/ vazia — rode com --fotos <dir>`);
 
   const capa = d.capa && fotos.includes(d.capa) ? d.capa : fotos[0];
+  // cleanUrls serve /imovel/<slug> sem barra final, entao caminho relativo
+  // resolveria para /imovel/fotos/NN.jpg e quebraria toda imagem da pagina.
+  const asset = f => `/imovel/${slug}/${f}`;
 
   // capa OG: 1200x630 absoluto, JPEG leve (WhatsApp ignora WebP e arquivo grande)
   jpeg(path.join(dir, capa), path.join(dir, 'og.jpg'), { w: 1200, h: 630 });
@@ -128,8 +131,10 @@ function render(slug) {
     `<div><dt>${esc(k)}</dt><dd>${String(v).includes('<span>') ? v : esc(v)}</dd></div>`).join('\n      ');
 
   // ---- galeria ----
+  const legendas = Array.isArray(d.legendas) ? d.legendas : [];
   const galeria = fotos.map((src, i) =>
-    `<button type="button" aria-label="Ampliar foto ${i + 1}"><img src="${esc(src)}" alt="" ` +
+    `<button type="button" style="--i:${i}" aria-label="Ampliar foto ${i + 1}">` +
+    `<img src="${esc(asset(src))}" alt="${esc(legendas[i] || '')}" ` +
     `loading="${i < 3 ? 'eager' : 'lazy'}" decoding="async"></button>`).join('\n    ');
 
   // ---- textos ----
@@ -155,7 +160,7 @@ function render(slug) {
   const wa = `https://wa.me/${cfg.whatsapp}?text=${encodeURIComponent(msg + '\n' + url)}`;
 
   const vals = {
-    URL: url, CAPA: capa, OG_IMAGE: `${url}/og.jpg`,
+    URL: url, CAPA: asset(capa), OG_IMAGE: `${url}/og.jpg`,
     OG_TITLE: ogTitle, OG_DESC: ogDesc,
     TITULO: d.titulo, TIPO: d.tipo, BAIRRO: d.bairro,
     PRECO: preco, CORRETOR: cfg.corretor,
@@ -176,7 +181,8 @@ function render(slug) {
     .replaceAll('{{REF}}', d.referencia ? `<p class="ref">Referência ${esc(d.referencia)}</p>` : '')
     .replaceAll('{{CRECI}}', cfg.creci ? ' · CRECI ' + esc(cfg.creci) : '')
     .replaceAll('{{WA_LINK}}', esc(wa))
-    .replaceAll('{{FOTOS_JSON}}', JSON.stringify(fotos));
+    .replaceAll('{{FOTOS_JSON}}', JSON.stringify(fotos.map(asset)))
+    .replaceAll('{{LEGENDAS_JSON}}', JSON.stringify(fotos.map((_, i) => legendas[i] || '')));
 
   const sobrou = html.match(/\{\{[A-Z_]+\}\}/g);
   if (sobrou) throw new Error('placeholder sem valor: ' + [...new Set(sobrou)].join(', '));
