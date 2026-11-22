@@ -6,10 +6,11 @@ description: Monta e publica a página de apresentação de um imóvel para envi
 # /pagina — página de apresentação de imóvel
 
 Produz uma página de rolagem vertical, pensada para o cliente abrir no celular a partir de um
-link do WhatsApp, e publica em `https://imoveis-goto.vercel.app/<slug>`.
+link do WhatsApp, e publica em `https://imoveis-goto.vercel.app/imovel/<slug>`.
 
-O repositório é a fonte da verdade: **cada imóvel é uma pasta na raiz**, e o site é republicado
-inteiro a cada push. Nunca apague pastas de imóveis anteriores — os links já foram enviados a clientes.
+O repositório é a fonte da verdade: **cada imóvel é uma pasta em `imovel/`**, e o site é republicado
+inteiro a cada push. A raiz fica livre para as páginas do site (home, busca, contato), que virão depois.
+Nunca apague pastas de imóveis anteriores — os links já foram enviados a clientes.
 
 ## 1. Reunir o material
 
@@ -30,7 +31,7 @@ O slug vira o link. **Não renomeie a pasta depois de enviar o link a alguém.**
 
 ## 3. Escrever o `dados.json`
 
-Crie `<slug>/dados.json`. Campos nulos ou ausentes são omitidos na página.
+Crie `imovel/<slug>/dados.json`. Campos nulos ou ausentes são omitidos na página.
 
 ```json
 {
@@ -41,6 +42,7 @@ Crie `<slug>/dados.json`. Campos nulos ou ausentes são omitidos na página.
   "preco_texto": null,
   "referencia": "AP-1042",
   "capa": "fotos/01.jpg",
+  "capa_posicao": null,
   "destaques": ["3 a 5 frases curtas"],
   "ficha": {
     "area_privativa": "98 m²", "area_total": null,
@@ -74,8 +76,13 @@ Crie `<slug>/dados.json`. Campos nulos ou ausentes são omitidos na página.
 node _build/build.js <slug> --fotos _originais/<slug>
 ```
 
-O script redimensiona as fotos para `<slug>/fotos/NN.jpg` (máx. 1600 px), recorta a capa em
-`og.jpg` 1200×630 para a prévia do WhatsApp e escreve `<slug>/index.html`.
+O script redimensiona as fotos para `imovel/<slug>/fotos/NN.jpg` (máx. 1600 px), recorta a capa em
+`og.jpg` 1200×630 para a prévia do WhatsApp e escreve `imovel/<slug>/index.html`.
+
+**Enquadramento da capa:** a capa ocupa a tela inteira em formato vertical, e quase toda foto de
+imóvel é deitada — o corte central costuma deixar parede no lugar do assunto. Olhe o screenshot e,
+se o assunto ficou fora, use `capa_posicao` com um valor de `object-position`: `"left center"`,
+`"center top"`, `"right center"`. O padrão é `center`.
 Para só regerar o HTML depois de editar o texto, rode sem `--fotos`.
 `node _build/build.js --all` regera todas as páginas (use depois de mexer no template).
 
@@ -88,7 +95,7 @@ Sirva a pasta e tire um screenshot no viewport de celular antes de mandar o link
 
 ```bash
 python3 -m http.server 8099 &
-node -e "const{chromium,devices}=require('playwright');(async()=>{const b=await chromium.launch();const p=await(await b.newContext({...devices['iPhone 13']})).newPage();await p.goto('http://127.0.0.1:8099/<slug>/');await p.waitForTimeout(900);await p.screenshot({path:'/tmp/pagina.png',fullPage:true});await b.close()})()"
+node -e "const{chromium,devices}=require('playwright');(async()=>{const b=await chromium.launch();const p=await(await b.newContext({...devices['iPhone 13']})).newPage();await p.goto('http://127.0.0.1:8099/imovel/<slug>/');await p.waitForTimeout(900);await p.screenshot({path:'/tmp/pagina.png',fullPage:true});await b.close()})()"
 ```
 
 Verifique: capa não corta o título, preço certo, ficha sem campo inventado, nenhum endereço exato,
@@ -102,6 +109,15 @@ git add -A && git commit -m "<slug>: página de apresentação" && git push
 
 A Vercel publica sozinha em ~1 minuto. Confirme que `https://imoveis-goto.vercel.app/<slug>`
 responde 200 e devolva o link pronto para copiar, em uma linha, sem markdown ao redor.
+
+## Sobre as fotos
+
+- **De 8 a 12 é o ponto certo.** Menos que isso a galeria fica pobre; mais que isso o cliente cansa
+  antes de chegar no botão.
+- **Foto de área comum não substitui foto do imóvel.** Hall, jardim e espaço gourmet entram no fim
+  da galeria, nunca na capa, e nunca em maioria.
+- **Cada argumento do texto precisa de imagem.** Se o descritivo vende piscina privativa e terraço,
+  e não há foto deles, ou chegam as fotos ou o argumento sai do texto.
 
 ## Cuidados que já custaram caro
 

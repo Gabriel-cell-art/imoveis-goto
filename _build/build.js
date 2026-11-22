@@ -11,6 +11,7 @@ const { execFileSync } = require('child_process');
 const ROOT = path.resolve(__dirname, '..');
 const TPL = path.join(__dirname, 'template.html');
 const CFG = path.join(ROOT, '_config.json');
+const IMOVEIS = path.join(ROOT, 'imovel');   // cada imovel fica em imovel/<slug>
 const MAXW_FOTO = 1600;
 const Q = 82;
 
@@ -60,7 +61,7 @@ im.save(sys.argv[2], "JPEG", quality=${Q}, optimize=True, progressive=True)
 
 // ---------- importacao de fotos ----------
 function importarFotos(slug, dir) {
-  const destDir = path.join(ROOT, slug, 'fotos');
+  const destDir = path.join(IMOVEIS, slug, 'fotos');
   const exts = /\.(jpe?g|png|webp|avif|heic|tiff?)$/i;
   const src = fs.readdirSync(dir).filter(f => exts.test(f)).sort((a, b) => a.localeCompare(b, 'pt-BR', { numeric: true }));
   if (!src.length) throw new Error('nenhuma imagem em ' + dir);
@@ -76,7 +77,7 @@ function importarFotos(slug, dir) {
 
 // ---------- render ----------
 function render(slug) {
-  const dir = path.join(ROOT, slug);
+  const dir = path.join(IMOVEIS, slug);
   const d = JSON.parse(fs.readFileSync(path.join(dir, 'dados.json'), 'utf8'));
   const cfg = JSON.parse(fs.readFileSync(CFG, 'utf8'));
   if (!/^55\d{10,11}$/.test(String(cfg.whatsapp || '')))
@@ -86,7 +87,7 @@ function render(slug) {
   if (!/^https:\/\//.test(String(cfg.base_url || '')))
     throw new Error('_config.json: "base_url" precisa ser a URL https do projeto');
   const base = cfg.base_url.replace(/\/+$/, '');
-  const url = `${base}/${slug}`;
+  const url = `${base}/imovel/${slug}`;
 
   const fotos = fs.readdirSync(path.join(dir, 'fotos'))
     .filter(f => /\.jpg$/i.test(f))
@@ -139,7 +140,7 @@ function render(slug) {
     .filter(Boolean).map(p => `<p>${esc(p)}</p>`).join('\n    ');
 
   // ---- open graph ----
-  const ogTitle = d.og?.titulo || `${d.tipo} no ${d.bairro} — ${preco}`;
+  const ogTitle = d.og?.titulo || `${d.tipo} em ${d.bairro} — ${preco}`;
   const ogDesc = d.og?.descricao || [
     f.quartos ? `${f.quartos} quarto${f.quartos > 1 ? 's' : ''}` : null,
     f.suites ? `${f.suites} suíte${f.suites > 1 ? 's' : ''}` : null,
@@ -148,7 +149,7 @@ function render(slug) {
   ].filter(Boolean).join(' · ');
 
   // ---- whatsapp ----
-  const msg = (cfg.mensagem || 'Olá! Vi a página do {tipo} no {bairro} e quero mais informações.')
+  const msg = (cfg.mensagem || 'Olá! Vi a página do imóvel em {bairro} ({preco}) e quero mais informações.')
     .replace('{tipo}', d.tipo).replace('{bairro}', d.bairro)
     .replace('{titulo}', d.titulo).replace('{preco}', preco);
   const wa = `https://wa.me/${cfg.whatsapp}?text=${encodeURIComponent(msg + '\n' + url)}`;
@@ -158,6 +159,7 @@ function render(slug) {
     OG_TITLE: ogTitle, OG_DESC: ogDesc,
     TITULO: d.titulo, TIPO: d.tipo, BAIRRO: d.bairro,
     PRECO: preco, CORRETOR: cfg.corretor,
+    CAPA_POS: d.capa_posicao || 'center',
     CTA_TITULO: d.cta_titulo || 'Quer conhecer pessoalmente?',
     CTA_TEXTO: d.cta_texto || 'Me chame no WhatsApp que eu organizo a visita no horário que for melhor para você e envio o que mais precisar sobre o imóvel.',
   };
@@ -189,9 +191,9 @@ const argv = process.argv.slice(2);
 if (!argv.length) { console.error('uso: node _build/build.js <slug> [--fotos <dir>] | --all'); process.exit(1); }
 
 if (argv[0] === '--all') {
-  const slugs = fs.readdirSync(ROOT, { withFileTypes: true })
-    .filter(e => e.isDirectory() && !e.name.startsWith('_') && !e.name.startsWith('.'))
-    .filter(e => fs.existsSync(path.join(ROOT, e.name, 'dados.json')))
+  const slugs = (fs.existsSync(IMOVEIS) ? fs.readdirSync(IMOVEIS, { withFileTypes: true }) : [])
+    .filter(e => e.isDirectory())
+    .filter(e => fs.existsSync(path.join(IMOVEIS, e.name, 'dados.json')))
     .map(e => e.name);
   slugs.forEach(s => { console.log(s); render(s); });
   console.log(`\n${slugs.length} página(s) regerada(s).`);

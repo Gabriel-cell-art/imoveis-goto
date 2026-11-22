@@ -1,11 +1,11 @@
 # imoveis-goto
 
 Páginas de apresentação de imóveis para enviar por WhatsApp.
-Site estático publicado na Vercel: `https://imoveis-goto.vercel.app/<slug>`.
+Site estático publicado na Vercel: `https://imoveis-goto.vercel.app/imovel/<slug>`.
 
 | Caminho | O que é |
 |---|---|
-| `<slug>/` | Um imóvel: `dados.json`, `fotos/`, `og.jpg` e `index.html` gerados |
+| `imovel/<slug>/` | Um imóvel: `dados.json`, `fotos/`, `og.jpg` e `index.html` gerados |
 | `_build/` | `template.html` e `build.js` (gerador, sem dependência npm) |
 | `_config.json` | WhatsApp, nome do corretor, CRECI, URL base |
 | `_originais/` | Fotos originais, fora do repo (`.gitignore`) |
